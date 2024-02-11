@@ -16,6 +16,7 @@ const Page = async({params}: {params: {id: string}}) =>{
     return(
         <section className="relative">
             <ThreadCard
+                key={thread.id}
                 thread={thread}
                 currentUserId={user.id}
                 />
