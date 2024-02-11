@@ -25,6 +25,7 @@ export default async function Home() {
           {
             result.threads.map((thread: any)=>(
               <ThreadCard
+                key={thread.id}
                 thread={thread}
                 currentUserId={user.id}
                 />
