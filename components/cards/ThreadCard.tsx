@@ -37,7 +37,7 @@ const ThreadCard =({
     const author = thread.author,
           comments = thread.comments,
           community = thread.community;
-    console.log('author', author)
+
     return(
       
         <article className={`flex w-full flex-col rounded-xl ${
