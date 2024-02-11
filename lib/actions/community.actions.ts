@@ -6,7 +6,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import Community from "../models/community.model";
 
-import { connectToDB } from "../mongoose";
+import { connectToDB } from "../validations/mongoose"
 
 export async function createCommunity(
   id: string,
