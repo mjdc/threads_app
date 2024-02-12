@@ -1,11 +1,9 @@
 "use server"
 import { revalidatePath } from 'next/cache';
-
-import { connectToDB } from "../validations/mongoose"
-
 import Thread from '../models/thread.model'
+import { connectToDB } from "../validations/mongoose"
 import User from '../models/user.model';
-import Community from "../models/community.model";
+
 interface Params {
     text : string,
     author: string,
@@ -13,38 +11,35 @@ interface Params {
     path: string
 }
 
-export async function createThread({ text, author, communityId, path }: Params
-    ) {
-      try {
+export async function createThread({
+    text,
+    author,
+    communityId,
+    path
+    }: Params): Promise<void>{
+    
+
+    try{
         connectToDB();
-    
-        const communityIdObject = await Community.findOne(
-          { id: communityId },
-          { _id: 1 }
+        const createdThread = await Thread.create(
+            {
+                text,
+                author,
+                community: communityId
+            },
         );
-    
-        const createdThread = await Thread.create({
-          text,
-          author,
-          community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
-        });
-    
-        // Update User model
-        await User.findByIdAndUpdate(author, {
-          $push: { threads: createdThread._id },
-        });
-    
-        if (communityIdObject) {
-          // Update Community model
-          await Community.findByIdAndUpdate(communityIdObject, {
-            $push: { threads: createdThread._id },
-          });
-        }
+
+        //Update user model
+        await User.findByIdAndUpdate(author,{
+            $push: { threads: createdThread._id}
+        })
     
         revalidatePath(path);
-      } catch (error: any) {
-        throw new Error(`Failed to create thread: ${error.message}`);
-      }
+    }catch(error:any){
+        throw new Error(`failed to create update user ${error.message}`)
+    }
+
+    
 }
 
 export async function fetchThreads(pageNumber = 1, pageSize = 20){
