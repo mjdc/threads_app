@@ -25,7 +25,8 @@ interface Props{
             };
         }[];
     }
-    authorId : string;
+    authorId? : string;
+    communityId? :string;
     isComment : boolean | false;
     currentUserId: string;
 }
@@ -33,12 +34,12 @@ const ThreadCard =({
     thread,
     isComment,
     authorId,
+    communityId,
     currentUserId
 }: Props)=>{
     const author = thread.author,
           comments = thread.comments,
           community = thread.community;
-
     return(
       
         <article className={`flex w-full flex-col rounded-xl ${
@@ -112,9 +113,11 @@ const ThreadCard =({
             </div>
           </div>
 
+          
+          </div>
           {/* TODO: Delete thread, show comment logos */}
           {!isComment && community && (
-            <Link href={`community/${community.id}`} className="mt-5 flex items-center">
+            <Link href={`/communities/${communityId || community.id}`} className="mt-5 flex items-center">
               <p className="text-subtle-medium text-gray-1">
                 {formatDateString(thread.createdAt)}
                 - {community.name} Community
@@ -122,7 +125,6 @@ const ThreadCard =({
               <Image src={community.image} alt={community.name} width={14} height={14} className="ml-1 rounded-full object-cover"/>
             </Link>
           )}
-          </div>
         </article>
     )
 }

@@ -8,24 +8,36 @@ import { fetchThreadbyId } from "@/lib/actions/thread.actions";
 const Page = async({params}: {params: {id: string}}) =>{
     if(!params.id) return null
     const user = await currentUser();
-    const userInfo = user ? await fetchUser(user.id) : null;
+    if (!user) return null;
+
+    const userInfo = await fetchUser(user.id);
     if(!userInfo?.onboarded) redirect("/onboarding")
 
-    const thread = await fetchThreadbyId(params.id)
+    if (!params.id) return null;
 
+    const thread = await fetchThreadbyId(params.id)
+    console.log('userInfo', userInfo)
+    console.log('img', user.imageUrl)
     return(
         <section className="relative">
+            <img src={user.imageUrl} />
+            <img src={userInfo.image} />
             <ThreadCard
                 key={thread.id}
                 thread={thread}
                 currentUserId={user.id}
                 />
             <div className="mt-7">
-            <Comment
+            {/* <Comment
                 threadId={params.id}
                 currentUser={userInfo}
                 currentUserImg={user.imageUrl}
-                currentUserId={JSON.stringify(userInfo._id)}
+                currentUserId={userInfo._id}
+            /> */}
+            <Comment
+            threadId={params.id}
+            currentUserImg={user.imageUrl}
+            currentUserId={JSON.stringify(userInfo._id)}
             />
             </div>
 

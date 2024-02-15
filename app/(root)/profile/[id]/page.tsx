@@ -23,7 +23,7 @@ async function Page({params} : {params : {id: string}}) {
         <section>
             <ProfileHeader
                 authUserId={user.id}
-                userInfo={userInfo}
+                info={userInfo}
             />
 
             <div className="mt-9">
@@ -57,7 +57,7 @@ async function Page({params} : {params : {id: string}}) {
                                     currentUserId={user.id}
                                     accountId={userInfo.id}
                                     accountType='User'
-
+                                    myThreads={myThreads}
                                     userInfo_id={userInfo._id}
                                 />
                                 

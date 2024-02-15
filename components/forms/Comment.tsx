@@ -22,15 +22,11 @@ import { addCommentToThread } from "@/lib/actions/thread.actions";
 
 interface Props {
   threadId: string;
-  currentUser: {
-    id:string,
-    imageUrl:string
-  }
   currentUserImg: string;
   currentUserId: string;
 }
 
-function Comment({ threadId, currentUser, currentUserImg, currentUserId }: Props) {
+function Comment({ threadId, currentUserImg, currentUserId }: Props) {
   const pathname = usePathname();
 
   const form = useForm<z.infer<typeof commentValidation>>({
@@ -50,8 +46,8 @@ function Comment({ threadId, currentUser, currentUserImg, currentUserId }: Props
 
     form.reset();
   };
-  return (
 
+  return (
     <Form {...form}>
       <form className='comment-form' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
@@ -87,5 +83,4 @@ function Comment({ threadId, currentUser, currentUserImg, currentUserId }: Props
     </Form>
   );
 }
-
 export default Comment;

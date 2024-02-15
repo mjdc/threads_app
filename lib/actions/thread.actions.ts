@@ -59,7 +59,13 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20){
             .sort({createdAt : 'desc'})
             .skip(skipAmount)
             .limit(pageSize)
-            .populate({path: 'author', model : User})
+            .populate({
+              path: 'author',
+              model : User})
+            .populate({
+              path: "community",
+              model: Community,
+            })
             .populate({
                 path: "children", // Populate the children field
                 populate: {
@@ -159,22 +165,18 @@ export async function addCommentToThread(
 
 
 
-
 export async function fetchThreadbyAuthor(userId: string) {
-    connectToDB()
-    try{
-      const threads = await Thread.find({author: userId, parentId: { $in: [null, undefined] }})
-      .populate({path: 'author', model : User})
-      .populate({
-          path: "children", // Populate the children field
-          populate: {
-            path: "author", // Populate the author field within children
-            model: User,
-            select: "_id name parentId image", // Select only _id and username fields of the author
-          },
-      }).exec()
-      return threads
-    }catch(error){
-
-    }
+  connectToDB()
+  try{
+    const threads = await Thread.find({author: userId, parentId: { $in: [null, undefined] }})
+    .populate({
+      path: "author",
+      model: User,
+      select: "name image _id",
+    })
+    .exec()
+    return threads
+  }catch(error:any){
+    throw new Error(`failed to create update user ${error.message}`)
+  }
 }

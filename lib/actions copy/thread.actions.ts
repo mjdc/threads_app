@@ -153,8 +153,6 @@ export async function addCommentToThread(
 }
 
 
-
-
 export async function fetchThreadbyAuthor(userId: string) {
     connectToDB()
     try{
