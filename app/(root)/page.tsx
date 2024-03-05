@@ -6,7 +6,7 @@ import ThreadCard from "@/components/cards/ThreadCard"
 
 export default async function Home() {
   const user = await currentUser();
-  if (!user) return null;
+  if (!user) redirect("/sign-in");
 
   const userInfo = await fetchUser(user.id)
   if (!userInfo?.onboarded) redirect("/onboarding");
