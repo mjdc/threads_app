@@ -20,8 +20,6 @@ const Page = async({params}: {params: {id: string}}) =>{
     console.log('img', user.imageUrl)
     return(
         <section className="relative">
-            <img src={user.imageUrl} />
-            <img src={userInfo.image} />
             <ThreadCard
                 key={thread.id}
                 thread={thread}
@@ -36,7 +34,7 @@ const Page = async({params}: {params: {id: string}}) =>{
             /> */}
             <Comment
             threadId={params.id}
-            currentUserImg={user.imageUrl}
+            currentUserImg={userInfo.image}
             currentUserId={JSON.stringify(userInfo._id)}
             />
             </div>

@@ -9,12 +9,12 @@ import { redirect } from "next/navigation";
 import { fetchThreadbyAuthor } from "@/lib/actions/thread.actions";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import ThreadCard from "@/components/cards/ThreadCard";
-async function Page({params} : {params : {id: string}}) {
 
+async function Page({params} : {params : {id: string}}) {
 
     const user = await currentUser();
     if(!user) return null;
-    const userInfo = await fetchUser(user?.id)
+    const userInfo = await fetchUser(params.id || user?.id)
     if(!userInfo?.onboarded) redirect("/onboarding")
 
     const myThreads = await fetchThreadbyAuthor(userInfo._id)
@@ -27,6 +27,7 @@ async function Page({params} : {params : {id: string}}) {
             />
 
             <div className="mt-9">
+                <h1>asfdasd{params.id}</h1>
                 <Tabs defaultValue='threads' className='w-full'>
                     <TabsList className="tab">
                         {profileTabs.map((tab)=>(
