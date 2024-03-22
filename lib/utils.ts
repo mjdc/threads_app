@@ -41,3 +41,8 @@ export function formatThreadCount(count: number): string {
     return `${threadCount} ${threadWord}`;
   }
 }
+
+// Function to find mentioned usernames in text
+export function extractMentionedUsernames(text:string ) {
+  return text.match(/@[a-zA-Z0-9_]+/g) || [];
+}

@@ -8,7 +8,6 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { fetchThreadbyAuthor } from "@/lib/actions/thread.actions";
 import ThreadsTab from "@/components/shared/ThreadsTab";
-import ThreadCard from "@/components/cards/ThreadCard";
 
 async function Page({params} : {params : {id: string}}) {
 
@@ -43,7 +42,7 @@ async function Page({params} : {params : {id: string}}) {
                                 {tab.label==='Threads' && (
                                     <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
                                         {userInfo.threads.length} 
-                                        <span>mine {myThreads?.length}</span>
+                                        {/* <span>mine {myThreads?.length}</span> */}
                                     </p>
                                 )}
                             </TabsTrigger>
@@ -57,8 +56,8 @@ async function Page({params} : {params : {id: string}}) {
                                 <ThreadsTab
                                     currentUserId={user.id}
                                     accountId={userInfo.id}
-                                    accountType='User'
-                                    myThreads={myThreads}
+                                    accountType={tab.value === 'replies' ? '' : 'User'}
+                                    tab={tab.value}
                                     userInfo_id={userInfo._id}
                                 />
                                 

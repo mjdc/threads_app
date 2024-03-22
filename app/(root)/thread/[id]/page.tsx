@@ -16,26 +16,25 @@ const Page = async({params}: {params: {id: string}}) =>{
     if (!params.id) return null;
 
     const thread = await fetchThreadbyId(params.id)
-    console.log('userInfo', userInfo)
-    console.log('img', user.imageUrl)
     return(
         <section className="relative">
             <ThreadCard
                 key={thread.id}
-                thread={thread}
+                thread={JSON.parse(JSON.stringify(thread))}
                 currentUserId={user.id}
+                userId={JSON.stringify(userInfo._id)}
                 />
             <div className="mt-7">
-            {/* <Comment
+                {/* <Comment
+                    threadId={params.id}
+                    currentUser={userInfo}
+                    currentUserImg={user.imageUrl}
+                    currentUserId={userInfo._id}
+                /> */}
+                <Comment
                 threadId={params.id}
-                currentUser={userInfo}
-                currentUserImg={user.imageUrl}
-                currentUserId={userInfo._id}
-            /> */}
-            <Comment
-            threadId={params.id}
-            currentUserImg={userInfo.image}
-            currentUserId={JSON.stringify(userInfo._id)}
+                currentUserImg={userInfo.image}
+                currentUserId={JSON.stringify(userInfo._id)}
             />
             </div>
 
@@ -44,16 +43,9 @@ const Page = async({params}: {params: {id: string}}) =>{
                 {thread.children.map((childItem: any) => (
                 <ThreadCard
                     key={childItem._id}
-                    thread={childItem}
+                    thread={JSON.parse(JSON.stringify(childItem))}
                     currentUserId={user.id}
-                    // id={childItem._id}
-                    // currentUserId={user.id}
-                    // parentId={childItem.parentId}
-                    // content={childItem.text}
-                    // author={childItem.author}
-                    // community={childItem.community}
-                    // createdAt={childItem.createdAt}
-                    // comments={childItem.children}
+                    userId={JSON.stringify(userInfo._id)}
                     isComment
                 />
                 ))}

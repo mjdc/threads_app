@@ -1,3 +1,4 @@
+
 "use server";
 
 import { FilterQuery, SortOrder } from "mongoose";
@@ -22,6 +23,14 @@ export async function fetchUser(userId: string) {
   }
 }
 
+export async function fetchUserbyUserName(username: string) {
+  try {
+    connectToDB();
+    return await User.findOne({ username });
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
+  }
+}
 interface Params {
   userId: string;
   username: string;
@@ -180,4 +189,68 @@ export async function getActivity(userId: string) {
     console.error("Error fetching replies: ", error);
     throw error;
   }
+}
+
+export async function getReplies(userId: string) {
+  connectToDB()
+  try{
+    const threads = await Thread.find({author: userId, parentId: { $ne: null }})
+    .populate({
+      path: "author",
+      model: User,
+      select: "name image _id",
+    });
+
+    return {threads}
+  }catch(error:any){
+    throw new Error(`failed to create update user ${error.message}`)
+  }
+}
+
+export async function fetchUserMentions(userId: string) {
+  try {
+    connectToDB();
+    const user = await User.findOne({ id: userId }).populate({
+      path: "mentions",
+      model: Thread,
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+        },
+        {
+          path: "author",
+          model: User,
+          select: "_id id name parentId image"
+        },
+        {
+          path: "children",
+          model: Thread,
+          populate: {
+            path: "author",
+            model: User,
+            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          },
+        }
+      ],
+    });
+    const threads = user.mentions
+    // const mentionedThreads = await Thread.find({ _id: { $in: user.mentions } });
+    return {threads};
+  } catch (error) {
+    console.error("Error fetching user threads:", error);
+    throw error;
+  }
+}
+// Function to retrieve user data for mentioned usernames
+async function getUserDataForMentions(mentionedUsernames: string[]) {
+  const userData = [];
+  for (const username of mentionedUsernames) {
+      const user = await User.findOne({ username: username.substring(1) }); // Remove "@" from username
+      if (user) {
+          userData.push(user);
+      }
+  }
+  return userData;
 }
