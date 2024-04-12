@@ -28,7 +28,7 @@ export default function RootLayout({children} : { children: React.ReactNode}){
                                 {children}
                             </div>
                         </section>
-                        <RightSidebar />
+                        {/* <RightSidebar /> */}
                     </main>
                     <Bottombar />
                 </body>
